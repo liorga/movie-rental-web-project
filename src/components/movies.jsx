@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { getMovies } from "../services/MovieService";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
+import { getMovies } from "../services/MovieService";
 import { paginate } from "../utils/paginate";
 
 class Movies extends Component {

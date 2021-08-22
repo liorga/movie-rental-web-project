@@ -8,7 +8,7 @@ const Table = (props) => {
   return (
     <table className="table">
       <TableHeader columns={columns} sortColumn={sortColumn} onSort={onSort} />
-      <TableBody columns={this.columns} data={data} />
+      <TableBody columns={columns} data={data} />
     </table>
   );
 };

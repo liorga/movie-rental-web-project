@@ -9,9 +9,7 @@ import "font-awesome/css/font-awesome.css";
 
 ReactDOM.render(
   <BrowserRouter>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <App />
   </BrowserRouter>,
   document.getElementById("root")
 );

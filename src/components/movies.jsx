@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import MoviesTable from "./moviesTable";
 import ListGroup from "./common/listGroup";
 import Pagination from "./common/pagination";
+import { Link, NavLink } from "react-router-dom";
 import { getGenres } from "../services/GenreService";
 import { getMovies } from "../services/MovieService";
 import { paginate } from "../utils/paginate";
@@ -85,6 +86,10 @@ class Movies extends Component {
           />
         </div>
         <div className="col">
+          <Link className="nav-item nav-link" to="/movies/new">
+            <button className="btn btn-primary mtl-4">New Movie</button>
+          </Link>
+
           <p>Showing {totalCount} Movies In The Database.</p>
           <MoviesTable
             movies={movies}

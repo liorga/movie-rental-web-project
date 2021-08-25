@@ -86,8 +86,12 @@ class Movies extends Component {
           />
         </div>
         <div className="col">
-          <Link className="nav-item nav-link" to="/movies/new">
-            <button className="btn btn-primary mtl-4">New Movie</button>
+          <Link
+            to="/movies/new"
+            className="btn btn-primary"
+            style={{ marginBottom: 20 }}
+          >
+            New Movie
           </Link>
 
           <p>Showing {totalCount} Movies In The Database.</p>

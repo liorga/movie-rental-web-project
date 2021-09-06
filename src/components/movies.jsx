@@ -1,13 +1,14 @@
-import React, { Component } from "react";
-import MoviesTable from "./moviesTable";
-import ListGroup from "./common/listGroup";
-import Pagination from "./common/pagination";
-import { Link, NavLink } from "react-router-dom";
-import { getGenres } from "../services/GenreService";
-import { getMovies } from "../services/MovieService";
-import { paginate } from "../utils/paginate";
-import SearchBox from "./common/searchBox";
-import _ from "lodash";
+import React, { Component } from 'react';
+import MoviesTable from './moviesTable';
+import ListGroup from './common/listGroup';
+import Pagination from './common/pagination';
+import { Link, NavLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { getGenres } from '../services/genreService';
+import { getMovies, deleteMovie } from '../services/movieService';
+import { paginate } from '../utils/paginate';
+import SearchBox from './common/searchBox';
+import _ from 'lodash';
 
 class Movies extends Component {
   state = {
@@ -15,19 +16,32 @@ class Movies extends Component {
     genres: [],
     currentPage: 1,
     pageSize: 4,
-    searchQuery: "",
+    searchQuery: '',
     selectedGenre: null,
-    sortColumn: { path: "title", order: "asc" },
+    sortColumn: { path: 'title', order: 'asc' },
   };
 
-  componentDidMount() {
-    const genres = [{ _id: "", name: "All Genres" }, ...getGenres()];
-    this.setState({ movies: getMovies(), genres });
+  async componentDidMount() {
+    const { data } = await getGenres();
+    const genres = [{ _id: '', name: 'All Genres' }, ...data];
+
+    const { data: movies } = await getMovies();
+    this.setState({ movies, genres });
   }
 
-  handleDelete = (movie) => {
-    const movies = this.state.movies.filter((m) => m._id !== movie._id);
+  handleDelete = async (movie) => {
+    const originalMovies = this.state.movies;
+    const movies = originalMovies.filter((m) => m._id !== movie._id);
     this.setState({ movies });
+
+    try {
+      await deleteMovie(movie._id);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404)
+        toast.error('this movie has already benn deleted.');
+
+      this.setState({ movies: originalMovies });
+    }
   };
 
   handleLike = (movie) => {
@@ -43,7 +57,7 @@ class Movies extends Component {
   };
 
   handleGenreSelect = (genre) => {
-    this.setState({ selectedGenre: genre, searchQuery: "", currentPage: 1 });
+    this.setState({ selectedGenre: genre, searchQuery: '', currentPage: 1 });
   };
 
   handleSearch = (query) => {
@@ -89,18 +103,18 @@ class Movies extends Component {
     const { totalCount, data: movies, searchQuery } = this.getPageData();
 
     return (
-      <div className="row">
-        <div className="col-3">
+      <div className='row'>
+        <div className='col-3'>
           <ListGroup
             items={this.state.genres}
             selectedItem={this.state.selectedGenre}
             onItemSelect={this.handleGenreSelect}
           />
         </div>
-        <div className="col">
+        <div className='col'>
           <Link
-            to="/movies/new"
-            className="btn btn-primary"
+            to='/movies/new'
+            className='btn btn-primary'
             style={{ marginBottom: 20 }}
           >
             New Movie

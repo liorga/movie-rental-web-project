@@ -35,7 +35,10 @@ class MovieForm extends Form {
 
   async populateMovie() {
     try {
-      const movieId = this.state.props.match.params.id;
+      const movieId = this.props.match.params.id;
+      if (movieId === undefined) {
+        const movieId = this.state.props.match.params.id;
+      }
       if (movieId === 'new') return;
 
       const { data: movie } = await getMovie(movieId);
